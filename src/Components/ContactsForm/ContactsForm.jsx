@@ -1,10 +1,16 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import phoonebookActions from '../../redux/phonebook/phoonebook-actions';
 import { Form, Label, Input, ButtonAdd } from './ContactsForm.styled';
-import PropTypes from 'prop-types';
 
-export function ContactsForm({ onSubmit }) {
+export function ContactsForm() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+
+  const dispatch = useDispatch();
+
+  const handleOnSubmitForm = (name, number) =>
+    dispatch(phoonebookActions.onSubmitForm(name, number));
 
   const handleInputChange = event => {
     const { name, value } = event.currentTarget;
@@ -22,7 +28,7 @@ export function ContactsForm({ onSubmit }) {
 
   const handleSubmit = event => {
     event.preventDefault();
-    onSubmit(name, number);
+    handleOnSubmitForm(name, number);
     resetSate();
   };
 
@@ -65,7 +71,3 @@ export function ContactsForm({ onSubmit }) {
 }
 
 export default ContactsForm;
-
-ContactsForm.propTypes = {
-  onSubmit: PropTypes.func,
-};

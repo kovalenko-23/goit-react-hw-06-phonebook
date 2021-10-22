@@ -1,17 +1,27 @@
+import { useSelector, useDispatch } from 'react-redux';
 import ContactsItem from '../ContactsItem/ContactsItem';
 import { List } from './ContactList.styled';
-import PropTypes from 'prop-types';
+import phoonebookActions from '../../redux/phonebook/phoonebook-actions';
 
-const ContactsList = ({ contacts, onDeleteButton }) => {
+const ContactsList = () => {
+  const contacts = useSelector(state => state.phoneBook.contacts);
+  const filter = useSelector(state => state.phoneBook.filter);
+  const dispatch = useDispatch();
+  const deleteContact = (id, name) =>
+    dispatch(phoonebookActions.deleteContact(id, name));
+
+  const visibleContacts = contacts.filter(contact =>
+    contact.name.toLowerCase().includes(filter),
+  );
   return (
     <List>
-      {contacts.map(({ id, name, number }) => (
+      {visibleContacts.map(({ id, name, number }) => (
         <ContactsItem
           key={id}
           id={id}
           name={name}
           number={number}
-          onDeleteButton={onDeleteButton}
+          onDeleteButton={() => deleteContact(id, name)}
         />
       ))}
     </List>
@@ -19,14 +29,3 @@ const ContactsList = ({ contacts, onDeleteButton }) => {
 };
 
 export default ContactsList;
-
-ContactsList.propTypes = {
-  onDeleteButtonacts: PropTypes.func,
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      name: PropTypes.string,
-      number: PropTypes.string,
-    }),
-  ).isRequired,
-};

@@ -1,24 +1,20 @@
 import shortid from 'shortid';
-import types from './phonebook-types';
+import { createAction } from '@reduxjs/toolkit';
 
-const onSubmitForm = (name, number) => ({
-  type: types.ON_SUBMIT_FORM,
+const changeFilter = createAction('phonebook/handleFinder');
+const deleteContact = createAction('phonebook/deletetContact', (id, name) => ({
   payload: {
-    id: shortid.generate(),
+    id,
     name,
-    number,
   },
-});
+}));
+const onSubmitForm = createAction(
+  'phonebook/handleOnSubmitForm',
+  (name, number) => ({
+    payload: { id: shortid.generate(), name, number },
+  }),
+);
 
-const deleteContact = (id, name) => ({
-  type: types.DELETE,
-  payload: { id, name },
-});
+const actions = { changeFilter, deleteContact, onSubmitForm };
 
-const changeFilter = event => ({
-  type: types.HANDLE_FINDER,
-  payload: event,
-});
-
-// eslint-disable-next-line import/no-anonymous-default-export
-export default { onSubmitForm, deleteContact, changeFilter };
+export default actions;

@@ -1,7 +1,12 @@
+import { useSelector, useDispatch } from 'react-redux';
 import { Wrapper, Filterlabel, FilterInput } from './ContactsFilter.styled';
-import PropTypes from 'prop-types';
+import phoonebookActions from '../../redux/phonebook/phoonebook-actions';
 
-export const ContactsFilter = ({ value, onChange }) => {
+const ContactsFilter = () => {
+  const filter = useSelector(state => state.phoneBook.filter);
+  const dispatch = useDispatch();
+  const hendleFinder = value => dispatch(phoonebookActions.changeFilter(value));
+
   return (
     <Wrapper>
       <Filterlabel>
@@ -9,15 +14,12 @@ export const ContactsFilter = ({ value, onChange }) => {
         <FilterInput
           type="text"
           name="message"
-          value={value}
-          onChange={onChange}
+          value={filter}
+          onChange={e => hendleFinder(e.currentTarget.value)}
         />
       </Filterlabel>
     </Wrapper>
   );
 };
 
-ContactsFilter.propTypes = {
-  value: PropTypes.string,
-  onChange: PropTypes.func,
-};
+export default ContactsFilter;
