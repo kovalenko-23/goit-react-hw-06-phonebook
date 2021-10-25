@@ -2,10 +2,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import ContactsItem from '../ContactsItem/ContactsItem';
 import { List } from './ContactList.styled';
 import phoonebookActions from '../../redux/phonebook/phoonebook-actions';
+import {
+  getContacts,
+  getFilter,
+} from '../../redux/phonebook/phonebook-selectors';
 
 const ContactsList = () => {
-  const contacts = useSelector(state => state.phoneBook.contacts);
-  const filter = useSelector(state => state.phoneBook.filter);
+  const contacts = useSelector(getContacts);
+  const filter = useSelector(getFilter);
   const dispatch = useDispatch();
   const deleteContact = (id, name) =>
     dispatch(phoonebookActions.deleteContact(id, name));

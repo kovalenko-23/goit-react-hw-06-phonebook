@@ -19,19 +19,10 @@ const contacts = createReducer(initialState, {
     }
 
     toast.success(`${payload.name} added to your contacts!`);
-    window.localStorage.setItem(
-      'contacts',
-      JSON.stringify([...state, payload]),
-    );
     return [...state, payload];
   },
 
   [actions.deleteContact]: (state, { payload }) => {
-    window.localStorage.setItem(
-      'contacts',
-      JSON.stringify(state.filter(contact => contact.id !== payload.id)),
-    );
-
     toast.success(`${payload.name} removed from your contacts`);
     return state.filter(contact => contact.id !== payload.id);
   },
