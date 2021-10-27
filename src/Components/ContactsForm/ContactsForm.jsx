@@ -1,13 +1,16 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
+import { getContacts } from '../../redux/phonebook/phonebook-selectors';
 import phoonebookActions from '../../redux/phonebook/phoonebook-actions';
 import { Form, Label, Input, ButtonAdd } from './ContactsForm.styled';
 
 export function ContactsForm() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
-
   const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
+  const contactsNamesArr = contacts.map(contact => contact.name);
 
   const handleOnSubmitForm = (name, number) =>
     dispatch(phoonebookActions.onSubmitForm(name, number));
@@ -28,7 +31,12 @@ export function ContactsForm() {
 
   const handleSubmit = event => {
     event.preventDefault();
+    if (contacts !== [] && contactsNamesArr.includes(name)) {
+      toast.error(`You already have ${name} in your contacts!`);
+      return;
+    }
     handleOnSubmitForm(name, number);
+    toast.success(`${name} added to your contacts!`);
     resetSate();
   };
 
